@@ -3,24 +3,21 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from .models import Term1,Term2,Term3,Term4,Term5,Term6,Term7,Term8,GPA
-
-#this is GradeGuide Page
 from lists.models import Userinfo
 
 def home_page(request):
-
     return render(request, 'home.html')
 
-#this is the Real HomePage
+#หน้า HomePage แรก
 def register(request):
     dataGPA = GPA.objects.all()
-    if len(dataGPA) == 0:
+    if len(dataGPA) == 0: # ทำการสร้างฐานข้อมูลของ GPA แต่ละเทอม
         GPA.objects.create(GPA_1=0, GPA_2=0, GPA_3=0, GPA_4=0, GPA_5=0, GPA_6=0, GPA_7=0, GPA_8=0, )
-    count = User.objects.count()
+    count = User.objects.count() #นับจำนวณ User
     return render(request, 'index.html', {
         'count': count
     })
-#this is signup Page
+#หน้า signup
 def signup(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
@@ -39,11 +36,11 @@ def signup(request):
     return render(request, 'registration/signup.html', {
         'form': form
     })
-#this is login page
 def calGrade(request):
     term1 = Term1()
     term2 = Term2()
     not_input = "Plese check your infromation before saving."
+    #เช็คค่าของ input
     checkinput = float(request.POST.get('subject1Unit')) + float(request.POST.get('subject1Grade'))+\
                  float(request.POST.get('subject2Unit')) + float(request.POST.get('subject2Grade'))+\
                  float(request.POST.get('subject3Unit')) + float(request.POST.get('subject3Grade'))+\
@@ -53,29 +50,30 @@ def calGrade(request):
                  float(request.POST.get('subject7Unit')) + float(request.POST.get('subject7Grade'))+\
                  float(request.POST.get('subject8Unit')) + float(request.POST.get('subject8Grade'))+\
                  float(request.POST.get('subject9Unit')) + float(request.POST.get('subject9Grade'))
-    if len(Term1.objects.all()) <= 9:
-        if request.POST.get('subjectTerm') == "1":
-            if checkinput == 0.0:
+    if len(Term1.objects.all()) <= 9: #เช็คว่าเคยมีข้อมูลหรือยัง
+        if request.POST.get('subjectTerm') == "1": #ถ้าเลือกเทอม 1
+            if checkinput == 0.0: #ไม่ได้กรอกข้อมูลจะแสดง "Plese check your infromation before saving."
                 return render(request, 'home.html', {'notinput': not_input})
-            sub1 = float(request.POST.get('subject1Unit')) * float(request.POST.get('subject1Grade'))
-            sub2 = float(request.POST.get('subject2Unit')) * float(request.POST.get('subject2Grade'))
-            sub3 = float(request.POST.get('subject3Unit')) * float(request.POST.get('subject3Grade'))
-            sub4 = float(request.POST.get('subject4Unit')) * float(request.POST.get('subject4Grade'))
-            sub5 = float(request.POST.get('subject5Unit')) * float(request.POST.get('subject5Grade'))
-            sub6 = float(request.POST.get('subject6Unit')) * float(request.POST.get('subject6Grade'))
-            sub7 = float(request.POST.get('subject7Unit')) * float(request.POST.get('subject7Grade'))
-            sub8 = float(request.POST.get('subject8Unit')) * float(request.POST.get('subject8Grade'))
-            sub9 = float(request.POST.get('subject9Unit')) * float(request.POST.get('subject9Grade'))
+            #ถ้ากรอกก็จะคำนวณเกรด
+            sub1 = float(request.POST.get('subject1Unit')) * float(request.POST.get('subject1Grade')) #ผลคูณของ Unit ตัวที่ 1 กับ Grade ตัวที่ 1
+            sub2 = float(request.POST.get('subject2Unit')) * float(request.POST.get('subject2Grade')) #ผลคูณของ Unit ตัวที่ 2 กับ Grade ตัวที่ 2
+            sub3 = float(request.POST.get('subject3Unit')) * float(request.POST.get('subject3Grade')) #ผลคูณของ Unit ตัวที่ 3 กับ Grade ตัวที่ 3
+            sub4 = float(request.POST.get('subject4Unit')) * float(request.POST.get('subject4Grade')) #ผลคูณของ Unit ตัวที่ 4 กับ Grade ตัวที่ 4
+            sub5 = float(request.POST.get('subject5Unit')) * float(request.POST.get('subject5Grade')) #ผลคูณของ Unit ตัวที่ 5 กับ Grade ตัวที่ 5
+            sub6 = float(request.POST.get('subject6Unit')) * float(request.POST.get('subject6Grade')) #ผลคูณของ Unit ตัวที่ 6 กับ Grade ตัวที่ 6
+            sub7 = float(request.POST.get('subject7Unit')) * float(request.POST.get('subject7Grade')) #ผลคูณของ Unit ตัวที่ 7 กับ Grade ตัวที่ 7
+            sub8 = float(request.POST.get('subject8Unit')) * float(request.POST.get('subject8Grade')) #ผลคูณของ Unit ตัวที่ 8 กับ Grade ตัวที่ 8
+            sub9 = float(request.POST.get('subject9Unit')) * float(request.POST.get('subject9Grade')) #ผลคูณของ Unit ตัวที่ 9 กับ Grade ตัวที่ 9
 
             sumunit = float(request.POST.get('subject1Unit')) + float(request.POST.get('subject2Unit')) + float(
                 request.POST.get('subject3Unit')) + float(request.POST.get('subject4Unit')) + float(
                 request.POST.get('subject5Unit')) + float(request.POST.get('subject6Unit')) + float(
                 request.POST.get('subject7Unit')) + float(request.POST.get('subject8Unit')) + float(
                 request.POST.get('subject9Unit')
-            )
-            sumsub = sub1 + sub2 + sub3 + sub4 + sub5 + sub6 + sub7 + sub8 + sub9
-            res = sumsub / sumunit
-            if len(Term1.objects.all()) == 0 :
+            ) # ผลรวมของ unit ทั้งหมด
+            sumsub = sub1 + sub2 + sub3 + sub4 + sub5 + sub6 + sub7 + sub8 + sub9 #ผลรวมของ Unit ตัวที่ 1 กับ Grade ตัวที่ 1 ถึง Unit ตัวที่ 9 กับ Grade ตัวที่ 9
+            res = sumsub / sumunit #นำผลรวมของ Unit ตัวที่ 1 กับ Grade ตัวที่ 1 ถึง Unit ตัวที่ 9 กับ Grade ตัวที่ 9 มาหาร ผลรวมของ unit ทั้งหมด
+            if len(Term1.objects.all()) == 0 : #เช็คว่าเคยมีข้องมูลแล้วหรือยัง ถ้ายังให้สร้างฐานข้อมูลในแต่ละวิชา
                 Term1.objects.create(subject =request.POST['subject1name'], unit=request.POST['subject1Unit'],Grade=request.POST['subject1Grade'],GPA=res)
 
                 Term1.objects.create(subject=request.POST['subject2name'],unit=request.POST['subject2Unit'],Grade=request.POST['subject2Grade'],GPA=res)
@@ -97,7 +95,7 @@ def calGrade(request):
 
 
                 return render(request, 'home.html',{'result':res})
-            else:
+            else: #ถ้าสร้างแล้วก็ให้ Update
                 Term1.objects.filter(pk=1).update(subject =request.POST['subject1name'], unit=request.POST['subject1Unit'],Grade=request.POST['subject1Grade'],GPA=res)
                 Term1.objects.filter(pk=2).update(subject =request.POST['subject2name'], unit=request.POST['subject2Unit'],Grade=request.POST['subject2Grade'],GPA=res)
                 Term1.objects.filter(pk=3).update(subject =request.POST['subject3name'], unit=request.POST['subject3Unit'],Grade=request.POST['subject3Grade'],GPA=res)
@@ -114,7 +112,7 @@ def calGrade(request):
                 term1.GPA = res
                 return render(request, 'home.html',{'result':res})
 
-        if request.POST.get('subjectTerm') == "2":
+        if request.POST.get('subjectTerm') == "2":#ถ้าเลือกเทอม 2
             if checkinput == 0.0:
                 return render(request, 'home.html', {'notinput': not_input})
             sub1 = float(request.POST.get('subject1Unit')) * float(request.POST.get('subject1Grade'))
@@ -518,11 +516,11 @@ def calGrade(request):
 
                 Term8.GPA = res
                 return render(request, 'home.html',{'result':res})
-        else:
+        else: #ถ้าไม่ได้เลือกเทอม
             message = 'Please select term before saving grade'
             return render(request, 'home.html',{'message':message})
 
-def termselect(request):
+def termselect(request): #การเลือกเทอม
 
     termsel=str(request.POST.get('selectterm'))
     return render(request, 'home.html', {'term1': termsel})
@@ -530,7 +528,7 @@ def termselect(request):
 def flow(request):
     Result = ''
     subjects = str(request.POST.get('searchFlow',''))
-    if 'searchSubject' in request.POST :
+    if 'searchSubject' in request.POST : #search แต่ละวิชา
         #1ProFund
         if subjects == "Programming Fundamental" :
             Result = """Semister2 : Algorithms and Data Structures <br />
@@ -702,7 +700,7 @@ def flow(request):
     
     return render(request, 'flow.html',{'subjects':subjects, 'Result':Result})
 
-def listOfSubject(request) :
+def listOfSubject(request) : #ดูวิชาแต่ละเทอม
     listSemister1 = """ Programming Fundamental<br />
             Engineering Mathematics I<br />
             Computer Engineering Exploration<br />
@@ -767,7 +765,7 @@ def listOfSubject(request) :
     return render(request, 'subject.html', {'semister1':listSemister1,'semister2':listSemister2,'semister3':listSemister3,'semister4':listSemister4,'semister5':listSemister5,'semister6':listSemister6,'semister7':listSemister7,'semister8':listSemister8})
 
 def Graph(request):
-    countunit = 0
+    #countunit = 0
     GPAX = 0
     dataterm_1 = Term1.objects.all()
     dataterm_2 = Term2.objects.all()
@@ -779,9 +777,9 @@ def Graph(request):
     dataterm_8 = Term8.objects.all()
     dataGPA = GPA.objects.all()
     countunit = 0
-    if len(dataGPA) == 0:
-        GPA.objects.create(GPA_1=0, GPA_2=0, GPA_3=0, GPA_4=0, GPA_5=0, GPA_6=0, GPA_7=0, GPA_8=0, )
-    for i in dataGPA:
+    #if len(dataGPA) == 0:
+        #GPA.objects.create(GPA_1=0, GPA_2=0, GPA_3=0, GPA_4=0, GPA_5=0, GPA_6=0, GPA_7=0, GPA_8=0, )
+    for i in dataGPA: #ทำการบวก GPA แต่ละเทอม
         GPAX = float(i.GPA_1) + float(i.GPA_2) + float(i.GPA_3) + float(i.GPA_4) + float(i.GPA_5) + float(i.GPA_6) + float(i.GPA_7) + float(i.GPA_8)
     if GPAX > 0.0:
         for unit in dataGPA:
@@ -803,30 +801,32 @@ def Graph(request):
                 countunit+=1
     else:
         countunit+=1
-    resGPAX = float(GPAX) / float(countunit)
+    resGPAX = float(GPAX) / float(countunit) #หาค่า GPAX
     newGPAX = '%.2f' % resGPAX
     return render(request, 'Graph.html', {'dataterm1': dataterm_1, 'dataterm2': dataterm_2, 'dataterm3': dataterm_3,
                                           'dataterm4': dataterm_4, 'dataterm5': dataterm_5, 'dataterm6': dataterm_6,
                                           'dataterm7': dataterm_7, 'dataterm8': dataterm_8, 'GPARES': dataGPA,
                                           'res_GPAX': newGPAX})
 def Result(request):
-    dataGPA = GPA.objects.all()
-    if len(dataGPA) == 0:
-        GPA.objects.create(GPA_1=0, GPA_2=0, GPA_3=0, GPA_4=0, GPA_5=0, GPA_6=0, GPA_7=0, GPA_8=0, )
-    dataterm_1 = Term1.objects.all()
-    dataterm_2 = Term2.objects.all()
-    dataGPA = GPA.objects.all()
-    return render(request, 'Result.html',{'dataterm1':dataterm_1,'dataterm2':dataterm_2,'GPARES':dataGPA})
-def firstTerm(request):
+    pass
+    #dataGPA = GPA.objects.all()
+   # if len(dataGPA) == 0:
+   #     GPA.objects.create(GPA_1=0, GPA_2=0, GPA_3=0, GPA_4=0, GPA_5=0, GPA_6=0, GPA_7=0, GPA_8=0, )
+   # dataterm_1 = Term1.objects.all()
+   # dataterm_2 = Term2.objects.all()
+   # dataGPA = GPA.objects.all()
+   # return render(request, 'Result.html',{'dataterm1':dataterm_1,'dataterm2':dataterm_2,'GPARES':dataGPA})
+def firstTerm(request): # GPA ของเทอม 1
     dataGPA = GPA.objects.all()
     dataterm_1 = Term1.objects.all()
     countunit = 0
-    if len(dataGPA) == 0:
-        GPA.objects.create(GPA_1=0, GPA_2=0, GPA_3=0, GPA_4=0, GPA_5=0, GPA_6=0, GPA_7=0, GPA_8=0, )
-    for i in dataGPA:
+    #if len(dataGPA) == 0:
+     #   GPA.objects.create(GPA_1=0, GPA_2=0, GPA_3=0, GPA_4=0, GPA_5=0, GPA_6=0, GPA_7=0, GPA_8=0, )
+
+    for i in dataGPA:#ทำการบวก GPA แต่ละเทอม
         GPAX = float(i.GPA_1) + float(i.GPA_2) + float(i.GPA_3) + float(i.GPA_4) + float(i.GPA_5) + float(i.GPA_6) + float(i.GPA_7) + float(i.GPA_8)
     if GPAX > 0.0:
-        for unit in dataGPA:
+        for unit in dataGPA: #ทำการหาค่าของเทอมที่ได้กรอกข้อมูลลงไป
             if unit.GPA_1 != "0" :
                 countunit+=1
             if unit.GPA_2 != "0" :
@@ -845,20 +845,21 @@ def firstTerm(request):
                 countunit+=1
     else:
         countunit+=1
-    resGPAX = float(GPAX) / float(countunit)
+    resGPAX = float(GPAX) / float(countunit) #หาค่า GPAX
     newGPAX = '%.2f' % resGPAX
     return render(request, 'firstTerm.html', {'dataterm1':dataterm_1,'GPARES':dataGPA,'res_GPAX': newGPAX})
 
-def secondTerm(request):
+def secondTerm(request):# GPA ของเทอม 2
     dataGPA = GPA.objects.all()
     dataterm_2 = Term2.objects.all()
     countunit = 0
-    if len(dataGPA) == 0:
-        GPA.objects.create(GPA_1=0, GPA_2=0, GPA_3=0, GPA_4=0, GPA_5=0, GPA_6=0, GPA_7=0, GPA_8=0, )
-    for i in dataGPA:
+   # if len(dataGPA) == 0:
+       # GPA.objects.create(GPA_1=0, GPA_2=0, GPA_3=0, GPA_4=0, GPA_5=0, GPA_6=0, GPA_7=0, GPA_8=0, )
+
+    for i in dataGPA:#ทำการบวก GPA แต่ละเทอม
         GPAX = float(i.GPA_1) + float(i.GPA_2) + float(i.GPA_3) + float(i.GPA_4) + float(i.GPA_5) + float(i.GPA_6) + float(i.GPA_7) + float(i.GPA_8)
     if GPAX > 0.0:
-        for unit in dataGPA:
+        for unit in dataGPA:#ทำการหาค่าของเทอมที่ได้กรอกข้อมูลลงไป
             if unit.GPA_1 != "0" :
                 countunit+=1
             if unit.GPA_2 != "0" :
@@ -881,16 +882,17 @@ def secondTerm(request):
     newGPAX = '%.2f' % resGPAX
     return render(request, 'secondTerm.html', {'dataterm2':dataterm_2,'GPARES':dataGPA,'res_GPAX': newGPAX})
 
-def thirdTerm(request):
+def thirdTerm(request):# GPA ของเทอม 3
     dataGPA = GPA.objects.all()
     dataterm_3 = Term3.objects.all()
     countunit = 0
-    if len(dataGPA) == 0:
-        GPA.objects.create(GPA_1=0, GPA_2=0, GPA_3=0, GPA_4=0, GPA_5=0, GPA_6=0, GPA_7=0, GPA_8=0, )
-    for i in dataGPA:
+   # if len(dataGPA) == 0:
+      #  GPA.objects.create(GPA_1=0, GPA_2=0, GPA_3=0, GPA_4=0, GPA_5=0, GPA_6=0, GPA_7=0, GPA_8=0, )
+
+    for i in dataGPA:#ทำการบวก GPA แต่ละเทอม
         GPAX = float(i.GPA_1) + float(i.GPA_2) + float(i.GPA_3) + float(i.GPA_4) + float(i.GPA_5) + float(i.GPA_6) + float(i.GPA_7) + float(i.GPA_8)
     if GPAX > 0.0:
-        for unit in dataGPA:
+        for unit in dataGPA:#ทำการหาค่าของเทอมที่ได้กรอกข้อมูลลงไป
             if unit.GPA_1 != "0" :
                 countunit+=1
             if unit.GPA_2 != "0" :
@@ -909,20 +911,21 @@ def thirdTerm(request):
                 countunit+=1
     else:
         countunit+=1
-    resGPAX = float(GPAX) / float(countunit)
+    resGPAX = float(GPAX) / float(countunit)#หาค่า GPAX
     newGPAX = '%.2f' % resGPAX
     return render(request, 'thirdTerm.html', {'dataterm3':dataterm_3,'GPARES':dataGPA,'res_GPAX': newGPAX})
 
-def fourthTerm(request):
+def fourthTerm(request):# GPA ของเทอม 4
     dataGPA = GPA.objects.all()
     dataterm_4 = Term4.objects.all()
     countunit = 0
-    if len(dataGPA) == 0:
-        GPA.objects.create(GPA_1=0, GPA_2=0, GPA_3=0, GPA_4=0, GPA_5=0, GPA_6=0, GPA_7=0, GPA_8=0, )
-    for i in dataGPA:
+    #if len(dataGPA) == 0:
+     #   GPA.objects.create(GPA_1=0, GPA_2=0, GPA_3=0, GPA_4=0, GPA_5=0, GPA_6=0, GPA_7=0, GPA_8=0, )
+
+    for i in dataGPA:#ทำการบวก GPA แต่ละเทอม
         GPAX = float(i.GPA_1) + float(i.GPA_2) + float(i.GPA_3) + float(i.GPA_4) + float(i.GPA_5) + float(i.GPA_6) + float(i.GPA_7) + float(i.GPA_8)
     if GPAX > 0.0:
-        for unit in dataGPA:
+        for unit in dataGPA:#ทำการหาค่าของเทอมที่ได้กรอกข้อมูลลงไป
             if unit.GPA_1 != "0" :
                 countunit+=1
             if unit.GPA_2 != "0" :
@@ -941,19 +944,20 @@ def fourthTerm(request):
                 countunit+=1
     else:
         countunit+=1
-    resGPAX = float(GPAX) / float(countunit)
+    resGPAX = float(GPAX) / float(countunit)#หาค่า GPAX
     newGPAX = '%.2f' % resGPAX
     return render(request, 'fourthTerm.html', {'dataterm4':dataterm_4,'GPARES':dataGPA,'res_GPAX': newGPAX})
 
-def fifthTerm(request):
+def fifthTerm(request):# GPA ของเทอม 5
     dataGPA = GPA.objects.all()
     dataterm_5 = Term5.objects.all()
     countunit = 0
-    if len(dataGPA) == 0:
-        GPA.objects.create(GPA_1=0, GPA_2=0, GPA_3=0, GPA_4=0, GPA_5=0, GPA_6=0, GPA_7=0, GPA_8=0, )
-    for i in dataGPA:
+   # if len(dataGPA) == 0:
+     #   GPA.objects.create(GPA_1=0, GPA_2=0, GPA_3=0, GPA_4=0, GPA_5=0, GPA_6=0, GPA_7=0, GPA_8=0, )
+
+    for i in dataGPA:#ทำการบวก GPA แต่ละเทอม
         GPAX = float(i.GPA_1) + float(i.GPA_2) + float(i.GPA_3) + float(i.GPA_4) + float(i.GPA_5) + float(i.GPA_6) + float(i.GPA_7) + float(i.GPA_8)
-    if GPAX > 0.0:
+    if GPAX > 0.0:#ทำการหาค่าของเทอมที่ได้กรอกข้อมูลลงไป
         for unit in dataGPA:
             if unit.GPA_1 != "0" :
                 countunit+=1
@@ -973,20 +977,21 @@ def fifthTerm(request):
                 countunit+=1
     else:
         countunit+=1
-    resGPAX = float(GPAX) / float(countunit)
+    resGPAX = float(GPAX) / float(countunit)#หาค่า GPAX
     newGPAX = '%.2f' % resGPAX
     return render(request, 'fifthTerm.html', {'dataterm5':dataterm_5,'GPARES':dataGPA,'res_GPAX': newGPAX})
 
-def sixthTerm(request):
+def sixthTerm(request):# GPA ของเทอม 6
     dataGPA = GPA.objects.all()
     dataterm_6 = Term6.objects.all()
     countunit = 0
-    if len(dataGPA) == 0:
-        GPA.objects.create(GPA_1=0, GPA_2=0, GPA_3=0, GPA_4=0, GPA_5=0, GPA_6=0, GPA_7=0, GPA_8=0, )
-    for i in dataGPA:
+   # if len(dataGPA) == 0:
+     #   GPA.objects.create(GPA_1=0, GPA_2=0, GPA_3=0, GPA_4=0, GPA_5=0, GPA_6=0, GPA_7=0, GPA_8=0, )
+
+    for i in dataGPA:#ทำการบวก GPA แต่ละเทอม
         GPAX = float(i.GPA_1) + float(i.GPA_2) + float(i.GPA_3) + float(i.GPA_4) + float(i.GPA_5) + float(i.GPA_6) + float(i.GPA_7) + float(i.GPA_8)
     if GPAX > 0.0:
-        for unit in dataGPA:
+        for unit in dataGPA:#ทำการหาค่าของเทอมที่ได้กรอกข้อมูลลงไป
             if unit.GPA_1 != "0" :
                 countunit+=1
             if unit.GPA_2 != "0" :
@@ -1005,20 +1010,21 @@ def sixthTerm(request):
                 countunit+=1
     else:
         countunit+=1
-    resGPAX = float(GPAX) / float(countunit)
+    resGPAX = float(GPAX) / float(countunit)#หาค่า GPAX
     newGPAX = '%.2f' % resGPAX
     return render(request, 'sixthTerm.html', {'dataterm6':dataterm_6,'GPARES':dataGPA,'res_GPAX': newGPAX})
 
-def seventhTerm(request):
+def seventhTerm(request):# GPA ของเทอม 7
     dataterm_7 = Term7.objects.all()
     dataGPA = GPA.objects.all()
     countunit = 0
-    if len(dataGPA) == 0:
-        GPA.objects.create(GPA_1=0, GPA_2=0, GPA_3=0, GPA_4=0, GPA_5=0, GPA_6=0, GPA_7=0, GPA_8=0, )
-    for i in dataGPA:
+   # if len(dataGPA) == 0:
+     #   GPA.objects.create(GPA_1=0, GPA_2=0, GPA_3=0, GPA_4=0, GPA_5=0, GPA_6=0, GPA_7=0, GPA_8=0, )
+
+    for i in dataGPA:#ทำการบวก GPA แต่ละเทอม
         GPAX = float(i.GPA_1) + float(i.GPA_2) + float(i.GPA_3) + float(i.GPA_4) + float(i.GPA_5) + float(i.GPA_6) + float(i.GPA_7) + float(i.GPA_8)
     if GPAX > 0.0:
-        for unit in dataGPA:
+        for unit in dataGPA:#ทำการหาค่าของเทอมที่ได้กรอกข้อมูลลงไป
             if unit.GPA_1 != "0" :
                 countunit+=1
             if unit.GPA_2 != "0" :
@@ -1037,19 +1043,19 @@ def seventhTerm(request):
                 countunit+=1
     else:
         countunit+=1
-    resGPAX = float(GPAX) / float(countunit)
+    resGPAX = float(GPAX) / float(countunit)#หาค่า GPAX
     newGPAX = '%.2f' % resGPAX
     return render(request, 'seventhTerm.html', {'dataterm7':dataterm_7,'GPARES':dataGPA,'res_GPAX': newGPAX})
 
-def eightTerm(request):
+def eightTerm(request):# GPA ของเทอม 8
     dataGPA = GPA.objects.all()
     dataterm_8 = Term8.objects.all()
     countunit = 0
-    if len(dataGPA) == 0:
-        GPA.objects.create(GPA_1=0, GPA_2=0, GPA_3=0, GPA_4=0, GPA_5=0, GPA_6=0, GPA_7=0, GPA_8=0, )
-    for i in dataGPA:
+  #  if len(dataGPA) == 0:
+    #    GPA.objects.create(GPA_1=0, GPA_2=0, GPA_3=0, GPA_4=0, GPA_5=0, GPA_6=0, GPA_7=0, GPA_8=0, )
+    for i in dataGPA:#ทำการบวก GPA แต่ละเทอม
         GPAX = float(i.GPA_1) + float(i.GPA_2) + float(i.GPA_3) + float(i.GPA_4) + float(i.GPA_5) + float(i.GPA_6) + float(i.GPA_7) + float(i.GPA_8)
-    if GPAX > 0.0:
+    if GPAX > 0.0:#ทำการหาค่าของเทอมที่ได้กรอกข้อมูลลงไป
         for unit in dataGPA:
             if unit.GPA_1 != "0" :
                 countunit+=1
@@ -1069,7 +1075,7 @@ def eightTerm(request):
                 countunit+=1
     else:
         countunit+=1
-    resGPAX = float(GPAX) / float(countunit)
+    resGPAX = float(GPAX) / float(countunit)#หาค่า GPAX
     newGPAX = '%.2f' % resGPAX
     return render(request, 'eightTerm.html', {'dataterm8':dataterm_8,'GPARES':dataGPA,'res_GPAX': newGPAX})
 
