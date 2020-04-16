@@ -4,15 +4,15 @@ class Userinfo(models.Model):
     #objects = None
     objects = None
     name = models.TextField(max_length=200, blank=True)
-    term1 = models.ManyToManyField('Term1')
-    term2 = models.ManyToManyField('Term2')
-    term3 = models.ManyToManyField('Term3')
-    term4 = models.ManyToManyField('Term4')
-    term5 = models.ManyToManyField('Term5')
-    term6 = models.ManyToManyField('Term6')
-    term7 = models.ManyToManyField('Term7')
-    term8 = models.ManyToManyField('Term8')
-    gpa = models.ManyToManyField('GPA')
+    #term1 = models.ManyToManyField('Term1')
+   # term2 = models.ManyToManyField('Term2')
+   # term3 = models.ManyToManyField('Term3')
+   # term4 = models.ManyToManyField('Term4')
+  #  term5 = models.ManyToManyField('Term5')
+   # term6 = models.ManyToManyField('Term6')
+    #term7 = models.ManyToManyField('Term7')
+  #  term8 = models.ManyToManyField('Term8')
+   # gpa = models.ManyToManyField('GPA')
     #password = models.TextField(max_length=200, blank=True)
     def __str__(self):
         return self.name

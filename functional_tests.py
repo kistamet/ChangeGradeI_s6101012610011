@@ -11,7 +11,7 @@ class NewVisitorTest(unittest.TestCase):
     def tearDown(self):
         self.browser.quit()
 
-    def test_index(self):
+    def test_index(self): #หน้า HomePage แรก
         #เอิร์ธได้ยินมาว่ามีเว็บในการคำนวณเกรดและอยากจะใช้งาน
         #จึงเข้าเว็บไปที่หน้า Homepage
 
@@ -85,7 +85,7 @@ class NewVisitorTest(unittest.TestCase):
             'submit'
         )
 
-    def test_login_fail(self):
+    def test_login_fail(self):#หน้า login เมื่อกรอกข้อมูลไม่ถูกต้อง
         #BASIC TEST
         self.browser.get('http://localhost:8000')
         '''Test Only Index'''
@@ -179,7 +179,7 @@ class NewVisitorTest(unittest.TestCase):
         error_message = self.browser.find_elements_by_xpath("//ul[@class='errorlist nonfield']").text
         self.assertIn('Please enter a correct username and password. Note that both fields may be case-sensitive.', error_message)
 
-    def test_login_pass(self):
+    def test_login_pass(self):#หน้า login เมื่อกรอกข้อมูลผ่าน
         #basic test
         self.browser.get('http://localhost:8000')
         '''Test Only Index'''
@@ -281,7 +281,7 @@ class NewVisitorTest(unittest.TestCase):
 
         '''End of Checking Login'''
 
-    def test_subjects_button_flow(self):
+    def test_subjects_button_flow(self):#หน้า flow
         # เธอคลิกเข้ามาที่ link flow
         self.browser.get('http://localhost:8000/flow.html')
         time.sleep(5)
@@ -304,7 +304,7 @@ class NewVisitorTest(unittest.TestCase):
 
         self.fail('Finish the test!')
 
-    def test_search_flow(self):
+    def test_search_flow(self):#ช่อง search หน้า flow
         # เธอคลิกเข้ามาที่ link flow
         self.browser.get('http://localhost:8000/flow.html')
 
@@ -350,7 +350,7 @@ class NewVisitorTest(unittest.TestCase):
 
         self.fail('Finish the test!')
         
-    def test_flow_pic(self):
+    def test_flow_pic(self):# link หน้า flow
         # เธอคลิกเข้ามาที่ link flow
         self.browser.get('http://localhost:8000/flow.html')
         time.sleep(5)
@@ -371,7 +371,7 @@ class NewVisitorTest(unittest.TestCase):
         time.sleep(10)
 
         self.fail('Finish the test!')
-    def test_home(self):
+    def test_home(self):#การ signup และ login และการกรอกข้อมูลเข้าไปที่หน้า Gradecalculator
         # เมื่อเขากดเข้าไปที่หน้า signup
         self.browser.get('http://localhost:8000/signup')
 
