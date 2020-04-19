@@ -11,14 +11,19 @@ def home_page(request):
 #หน้า HomePage แรก
 def register(request):
     dataGPA = GPA.objects.all()
-    if len(dataGPA) == 0: # ทำการสร้างฐานข้อมูลของ GPA แต่ละเทอม
+    if len(dataGPA) == 0: #เมื่อผู้ใช้เข้ามาจะไปที่หน้า register และจะทำการทำการสร้างฐานข้อมูลของ GPA แต่ละเทอมของผู้ใช้งาน
+        #จริงๆ เงื่อนไขนี้ควรไปอยู่ที่ calGrade เพราะถ้าผู้ใช้ login เข้ามาแล้วให้สร้างฐานข้อมูลของ GPA ในแต่ละเทอม
         GPA.objects.create(GPA_1=0, GPA_2=0, GPA_3=0, GPA_4=0, GPA_5=0, GPA_6=0, GPA_7=0, GPA_8=0, )
     count = User.objects.count() #นับจำนวณ User
     return render(request, 'index.html', {
         'count': count
     })
 #หน้า signup
+#ใช้ django signup from
 def signup(request):
+    #ถ้ากรอกข้อมูลตามเงื่อนไข from django ได้ถูกต้อง
+    #จะทำการ save ข้อมูล
+    #และ login อัตโนมัติ
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
         if form.is_valid():
@@ -31,6 +36,7 @@ def signup(request):
             user = authenticate(username=username, password=raw_password)
             login(request, user)
             return redirect('home')
+    #ถ้าไม่ถูกจะ return หน้า signup และมีข้อบอกว่าทำไมถึงกรอกไม่ถูกเงื่อนไข
     else:
         form = UserCreationForm()
     return render(request, 'registration/signup.html', {
