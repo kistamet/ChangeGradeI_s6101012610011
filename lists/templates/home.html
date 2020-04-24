@@ -241,13 +241,13 @@
   </tbody>
 </table>
         <br>
-            <button type="button" class="btn btn-primary btn-lg" onclick="Submitcal()">Submit</button>
-            <input type="submit" class="btn btn-secondary btn-lg" value="Save">
+            <button type="button" class="btn btn-primary btn-lg" onclick="Submitcal()" id = "submit_button" >Submit</button>
+            <input type="submit" class="btn btn-secondary btn-lg" value="Save" id = "save_button">
         </form>
 
         <p><font size="5" color="B03A2E">{{message}}</font></p>
-        <h1><font size="6" >Your GPA  : {{result}}{{notinput}} <p" id="demo""></p></font></h1>
-        <h1><font size="6" >Student Status : <p" id="student_state""></font></p></h1>
+        <h1><font size="6" id="gradeshow">Your GPA  : {{result}}{{notinput}} <p" id="demo""></p></font></h1>
+        <h1><font size="6" id="showStatus" >Student Status : <p" id="student_state""></font></p></h1>
 
         <script>
         function Submitcal() {

@@ -4,6 +4,9 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from .models import Term1,Term2,Term3,Term4,Term5,Term6,Term7,Term8,GPA
 from lists.models import Userinfo
+from django import forms
+
+from lists.forms import SignUpForm
 
 def home_page(request):
     return render(request, 'home.html')
@@ -18,25 +21,33 @@ def register(request):
     return render(request, 'index.html', {
         'count': count
     })
+
+#def signup(request):
+#    form = UserCreationForm(request.POST)
+    #form = SignUpForm()
+#    return render(request, 'registration/signup.html', {
+#        'form': form
+#    })
+
 #หน้า signup
 #ใช้ django signup from
 def signup(request):
     #ถ้ากรอกข้อมูลตามเงื่อนไข from django ได้ถูกต้อง
     #จะทำการ save ข้อมูล
     #และ login อัตโนมัติ
-    if request.method == 'POST':
+    if request.method == 'POST':#เช็ค request
         form = UserCreationForm(request.POST)
-        if form.is_valid():
+        if form.is_valid():#เช็คความถูกต้องของ form
             user = form.save()
             user.refresh_from_db()
             username = form.cleaned_data.get('username')
             raw_password = form.cleaned_data.get('password1')
             Userinfo.objects.create(name=username)
             user.save()
-            user = authenticate(username=username, password=raw_password)
+            user = authenticate(username=username, password=raw_password)#ตรวจสอบความถูกต้องของข้อมูล username password
             login(request, user)
             return redirect('home')
-    #ถ้าไม่ถูกจะ return หน้า signup และมีข้อบอกว่าทำไมถึงกรอกไม่ถูกเงื่อนไข
+    # ถ้าไม่ถูกจะ return หน้า signup และมีข้อบอกว่าทำไมถึงกรอกไม่ถูกเงื่อนไข
     else:
         form = UserCreationForm()
     return render(request, 'registration/signup.html', {
