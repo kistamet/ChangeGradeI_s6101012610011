@@ -112,7 +112,6 @@ class NewVisitorTest(unittest.TestCase):
         HELP_link = self.browser.find_element_by_tag_name('nav').text
         self.assertIn('HELP', HELP_link)
         time.sleep(3)
-        self.fail('Finish the test!')
     def test_login_fail(self):
         self.browser.get('http://localhost:8000')
         time.sleep(3)
@@ -176,7 +175,6 @@ class NewVisitorTest(unittest.TestCase):
         self.assertIn('Please enter a correct username and password. Note that both fields may be case-sensitive.',
                       error_message)
         time.sleep(3)
-        self.fail('Finish the test!')
     def test_signup_test_calculateGrade_and_test_Button_search_Picture_in_Flowpage(self):
         self.browser.get('http://localhost:8000')
         time.sleep(3)
@@ -248,7 +246,7 @@ class NewVisitorTest(unittest.TestCase):
         unit1_text.send_keys('Unit: 1')
         # เขาใส่ Grade
         Grade1_text = self.browser.find_element_by_id('subject1Gradeid')
-        Grade1_text.send_keys("Grade: 3.5 (B+)")
+        Grade1_text.send_keys("Grade: 3.5&nbsp; (B+)")
         time.sleep(5)
         # เขาใส่ unit ตัวที่2
         unit2_text = self.browser.find_element_by_id('subject2Unitid')
@@ -354,8 +352,6 @@ class NewVisitorTest(unittest.TestCase):
             'image'
         )
         time.sleep(3)
-
-        self.fail('Finish the test!')
 
 
 
