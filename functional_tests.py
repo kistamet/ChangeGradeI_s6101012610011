@@ -17,7 +17,7 @@ class NewVisitorTest(unittest.TestCase):
         self.browser.get('http://localhost:8000')
         '''Test Only Index'''
         time.sleep(3)
-        #เขาสังเกตุว่ามีลิงค์ GRADGUIDE FLOW ABOUT HELP SIGNUP LOGIN
+        #เขาสังเกตุว่ามีลิงค์ GRADEGUIDE FLOW ABOUT HELP SIGNUP LOGIN
         homepage_link = self.browser.find_element_by_tag_name('nav').text
         self.assertIn('GRADEGUIDE', homepage_link)
 
