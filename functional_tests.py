@@ -19,7 +19,7 @@ class NewVisitorTest(unittest.TestCase):
         time.sleep(3)
         #เขาสังเกตุว่ามีลิงค์ GRADGUIDE FLOW ABOUT HELP SIGNUP LOGIN
         homepage_link = self.browser.find_element_by_tag_name('nav').text
-        self.assertIn('GRADGUIDE', homepage_link)
+        self.assertIn('GRADEGUIDE', homepage_link)
 
         signup_link = self.browser.find_element_by_tag_name('nav').text
         self.assertIn('SIGNUP', signup_link)
@@ -175,6 +175,7 @@ class NewVisitorTest(unittest.TestCase):
         self.assertIn('Please enter a correct username and password. Note that both fields may be case-sensitive.',
                       error_message)
         time.sleep(3)
+
     def test_signup_test_calculateGrade_and_test_Button_search_Picture_in_Flowpage(self):
         self.browser.get('http://localhost:8000')
         time.sleep(3)
@@ -352,7 +353,6 @@ class NewVisitorTest(unittest.TestCase):
             'image'
         )
         time.sleep(3)
-
 
 
 if __name__ == '__main__':
