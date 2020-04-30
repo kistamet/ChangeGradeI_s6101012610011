@@ -6,6 +6,7 @@ class Datagrade(models.Model):
     subject = models.CharField(max_length=255)
     unit = models.CharField(max_length=255)
     Grade = models.CharField(max_length=255)
+    GPA = models.CharField(max_length=255)
     def __str__(self):
         return str(self.user)
 class GPA(models.Model):
