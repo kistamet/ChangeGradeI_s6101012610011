@@ -3,12 +3,14 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from .models import GPA,Datagrade
+#หน้า Gradecalculator
 def home_page(request):
     return render(request, 'home.html')
 
 #หน้า HomePage แรก
 def register(request):
-    count = User.objects.count() #นับจำนวณ User
+    count = User.objects.count()
+    #นับจำนวณ User
     return render(request, 'index.html', {
         'count': count
     })
@@ -18,9 +20,11 @@ def signup(request):
     #ถ้ากรอกข้อมูลตามเงื่อนไข from django ได้ถูกต้อง
     #จะทำการ save ข้อมูล
     #และ login อัตโนมัติ
-    if request.method == 'POST':#เช็ค request
+    if request.method == 'POST':
+        #เช็ค request
         form = UserCreationForm(request.POST)
-        if form.is_valid():#เช็คความถูกต้องของ form
+        # เช็คความถูกต้องของ form
+        if form.is_valid():
             user = form.save()
             user.refresh_from_db()
             username = form.cleaned_data.get('username')
@@ -35,10 +39,11 @@ def signup(request):
     return render(request, 'registration/signup.html', {
         'form': form
     })
-
-def calGrade(request): #หน้า Gradecalculator และปุ่มกด Save
+#หน้า Gradecalculator และปุ่มกด Save
+def calGrade(request):
     if request.method == 'POST':
-        if request.POST.get('subjectTerm') == "0": #เช็ค input
+        # เช็ค input
+        if request.POST.get('subjectTerm') == "0":
             message = 'Please select term before saving grade'
             return render(request, 'home.html', {'message': message})
         not_input = "Plese check your infromation before saving."
@@ -51,35 +56,43 @@ def calGrade(request): #หน้า Gradecalculator และปุ่มกด
                      float(request.POST.get('subject7Unit')) + float(request.POST.get('subject7Grade')) + \
                      float(request.POST.get('subject8Unit')) + float(request.POST.get('subject8Grade')) + \
                      float(request.POST.get('subject9Unit')) + float(request.POST.get('subject9Grade'))
-        if checkinput == 0.0:  # ไม่ได้กรอกข้อมูลจะแสดง "Plese check your infromation before saving."
+        # ไม่ได้กรอกข้อมูลจะแสดง "Plese check your infromation before saving."
+        if checkinput == 0.0:
             return render(request, 'home.html', {'notinput': not_input})
-        sub1 = float(request.POST.get('subject1Unit')) * float(request.POST.get('subject1Grade'))  # ผลคูณของ Unit ตัวที่ 1 กับ Grade ตัวที่ 1
-        sub2 = float(request.POST.get('subject2Unit')) * float(request.POST.get('subject2Grade'))  # ผลคูณของ Unit ตัวที่ 2 กับ Grade ตัวที่ 2
-        sub3 = float(request.POST.get('subject3Unit')) * float(request.POST.get('subject3Grade'))  # ผลคูณของ Unit ตัวที่ 3 กับ Grade ตัวที่ 3
-        sub4 = float(request.POST.get('subject4Unit')) * float(request.POST.get('subject4Grade'))  # ผลคูณของ Unit ตัวที่ 4 กับ Grade ตัวที่ 4
-        sub5 = float(request.POST.get('subject5Unit')) * float(request.POST.get('subject5Grade'))  # ผลคูณของ Unit ตัวที่ 5 กับ Grade ตัวที่ 5
-        sub6 = float(request.POST.get('subject6Unit')) * float(request.POST.get('subject6Grade'))  # ผลคูณของ Unit ตัวที่ 6 กับ Grade ตัวที่ 6
-        sub7 = float(request.POST.get('subject7Unit')) * float(request.POST.get('subject7Grade'))  # ผลคูณของ Unit ตัวที่ 7 กับ Grade ตัวที่ 7
-        sub8 = float(request.POST.get('subject8Unit')) * float(request.POST.get('subject8Grade'))  # ผลคูณของ Unit ตัวที่ 8 กับ Grade ตัวที่ 8
-        sub9 = float(request.POST.get('subject9Unit')) * float(request.POST.get('subject9Grade'))  # ผลคูณของ Unit ตัวที่ 9 กับ Grade ตัวที่ 9
-
+        # ผลคูณของ Unit ตัวที่ 1 กับ Grade ตัวที่ 1 ถึง ผลคูณของ Unit ตัวที่ 9 กับ Grade ตัวที่ 9
+        sub1 = float(request.POST.get('subject1Unit')) * float(request.POST.get('subject1Grade'))
+        sub2 = float(request.POST.get('subject2Unit')) * float(request.POST.get('subject2Grade'))
+        sub3 = float(request.POST.get('subject3Unit')) * float(request.POST.get('subject3Grade'))
+        sub4 = float(request.POST.get('subject4Unit')) * float(request.POST.get('subject4Grade'))
+        sub5 = float(request.POST.get('subject5Unit')) * float(request.POST.get('subject5Grade'))
+        sub6 = float(request.POST.get('subject6Unit')) * float(request.POST.get('subject6Grade'))
+        sub7 = float(request.POST.get('subject7Unit')) * float(request.POST.get('subject7Grade'))
+        sub8 = float(request.POST.get('subject8Unit')) * float(request.POST.get('subject8Grade'))
+        sub9 = float(request.POST.get('subject9Unit')) * float(request.POST.get('subject9Grade'))
+        # ผลรวมของ unit ทั้งหมด
         sumunit = float(request.POST.get('subject1Unit')) + float(request.POST.get('subject2Unit')) + float(
             request.POST.get('subject3Unit')) + float(request.POST.get('subject4Unit')) + float(
             request.POST.get('subject5Unit')) + float(request.POST.get('subject6Unit')) + float(
             request.POST.get('subject7Unit')) + float(request.POST.get('subject8Unit')) + float(
             request.POST.get('subject9Unit')
-        )  # ผลรวมของ unit ทั้งหมด
-        sumsub = sub1 + sub2 + sub3 + sub4 + sub5 + sub6 + sub7 + sub8 + sub9  # ผลรวมของ Unit ตัวที่ 1 กับ Grade ตัวที่ 1 ถึง Unit ตัวที่ 9 กับ Grade ตัวที่ 9
-        res = '%.2f' %(sumsub / sumunit)  # นำผลรวมของ Unit ตัวที่ 1 กับ Grade ตัวที่ 1 ถึง Unit ตัวที่ 9 กับ Grade ตัวที่ 9 มาหาร ผลรวมของ unit ทั้งหมด
-        #บันทึกค่าลง Batabase
+        )
+        # ผลรวมของ Unit ตัวที่ 1 กับ Grade ตัวที่ 1 ถึง Unit ตัวที่ 9 กับ Grade ตัวที่ 9
+        sumsub = sub1 + sub2 + sub3 + sub4 + sub5 + sub6 + sub7 + sub8 + sub9
+        # นำผลรวมของ Unit ตัวที่ 1 กับ Grade ตัวที่ 1 ถึง Unit ตัวที่ 9 กับ Grade ตัวที่ 9 มาหาร ผลรวมของ unit ทั้งหมด
+        res = '%.2f' %(sumsub / sumunit)
+        #รับค่าจาก User และบันทึกค่าลง Batabase
         if len(Datagrade.objects.all()) != 0:
+            # Update ค่า
             for i in Datagrade.objects.all():
+                #ลบค่าของ subject unit Grade term user ที่เคยบันทีกไว้
                 if request.user == i.user and i.term == request.POST.get('subjectTerm'):
                     Datagrade.objects.filter(pk=i.id).delete()
             for item in GPA.objects.all():
+                #ลบค่าของ GPA ที่เคยบันทีกไว้
                 if request.user == item.user and item.termgpa == request.POST.get('subjectTerm'):
                     GPA.objects.filter(pk=item.id).delete()
-        Datagrade.objects.create(subject=request.POST['subject1name'], unit=request.POST['subject1Unit'],
+        # ทำการสร้าง subject unit Grade term user จาก input ของ User
+        Datagrade.objects.create(subject=request.POST['subject1name'],unit=request.POST['subject1Unit'],
                                  Grade=request.POST['subject1Grade'], term=request.POST.get('subjectTerm'),
                                  user=request.user)
         Datagrade.objects.create(subject=request.POST['subject2name'], unit=request.POST['subject2Unit'],
@@ -106,12 +119,14 @@ def calGrade(request): #หน้า Gradecalculator และปุ่มกด
         Datagrade.objects.create(subject=request.POST['subject9name'], unit=request.POST['subject9Unit'],
                                  Grade=request.POST['subject9Grade'], term=request.POST.get('subjectTerm'),
                                  user=request.user)
+        #สร้าง GPA user termgpa GPAX
         GPA.objects.create(GPA=res,user=request.user,termgpa=request.POST.get('subjectTerm'),GPAX="0")
         return render(request, 'home.html', {'result': res})
 def flow(request):
     Result = ''
     subjects = str(request.POST.get('searchFlow',''))
-    if 'searchSubject' in request.POST : #search แต่ละวิชา
+    # search แต่ละวิชา
+    if 'searchSubject' in request.POST :
         #1ProFund
         if subjects == "Programming Fundamental" :
             Result = """Semister2 : Algorithms and Data Structures <br />
@@ -282,7 +297,8 @@ def flow(request):
             Result = "The subject isn't in the flow"
     
     return render(request, 'flow.html',{'subjects':subjects, 'Result':Result})
-def listOfSubject(request) : #ดูวิชาแต่ละเทอม
+def listOfSubject(request) :
+    # ดูวิชาแต่ละเทอม
     listSemister1 = """ Programming Fundamental<br />
             Engineering Mathematics I<br />
             Computer Engineering Exploration<br />
@@ -345,8 +361,8 @@ def listOfSubject(request) : #ดูวิชาแต่ละเทอม
             Science and Maths Elective III"""
 
     return render(request, 'subject.html', {'semister1':listSemister1,'semister2':listSemister2,'semister3':listSemister3,'semister4':listSemister4,'semister5':listSemister5,'semister6':listSemister6,'semister7':listSemister7,'semister8':listSemister8})
-
-def Graph(request):#หน้า Graph
+#หน้า Graph
+def Graph(request):
     datagpax=[]
     Resultgpax = 0
     unit_lower=[]
@@ -359,6 +375,7 @@ def Graph(request):#หน้า Graph
     datagpagraph_term6= [0]
     datagpagraph_term7= [0]
     datagpagraph_term8= [0]
+    #หาค่า Grade และ Unit แต่ละเทอม
     for i in Datagrade.objects.all():
         if request.user == i.user and i.term == "1":
             if i.Grade != "0":
@@ -392,12 +409,15 @@ def Graph(request):#หน้า Graph
             if i.Grade != "0":
                 datagpax.append(float(i.Grade))
                 unit_lower.append(int(i.unit))
+    #หาค่า Unit * Grade ในแต่ละเทอม (GPAX)
     for data in GPA.objects.all():
         if request.user == data.user and data.termgpa == "1":
             for listunit in range(len(unit_lower)):
                 resunit = unit_lower[listunit]*datagpax[listunit]
                 unit_upper.append(resunit)
+            #GPAX
             Resultgpax = '%.2f' %(sum(unit_upper)/sum(unit_lower))
+    #หา GPA แต่ละเทอม เพื่อ plot graph
     for i in GPA.objects.all():
         if request.user == i.user and i.termgpa == "1" :
             datagpagraph_term1 = []
@@ -428,7 +448,8 @@ def Graph(request):#หน้า Graph
                                      'datagpagraph_term5':datagpagraph_term5,'datagpagraph_term6':datagpagraph_term6,
                                      'datagpagraph_term7':datagpagraph_term7,'datagpagraph_term8':datagpagraph_term8,
                                      'Resultgpax':Resultgpax})
-def firstTerm(request): # GPA ของเทอม 1
+#หน้า Result เทอม1
+def firstTerm(request):
     datagrade1 = []
     datagpa1=[]
     datagpax=[]
@@ -436,8 +457,10 @@ def firstTerm(request): # GPA ของเทอม 1
     unit_upper =[]
     Resultgpax=0
     for i in Datagrade.objects.all():
+        # หาค่า Grade ในเทอม 1
         if request.user == i.user and i.term == "1":
             datagrade1.append(i)
+        # หาค่า Grade และ Unit แต่ละเทอม
         if request.user == i.user and i.term == "1":
             if i.Grade != "0":
                 datagpax.append(float(i.Grade))
@@ -470,18 +493,20 @@ def firstTerm(request): # GPA ของเทอม 1
             if i.Grade != "0":
                 datagpax.append(float(i.Grade))
                 unit_lower.append(int(i.unit))
+    #หาค่า Unit * Grade ในแต่ละเทอม (GPAX)
     for data in GPA.objects.all():
         if request.user == data.user and data.termgpa == "1":
             for listunit in range(len(unit_lower)):
                 resunit = unit_lower[listunit]*datagpax[listunit]
                 unit_upper.append(resunit)
             Resultgpax = '%.2f' %(sum(unit_upper)/sum(unit_lower))
+    #หาค่า GPA เทอม 1
     for item in GPA.objects.all():
         if request.user == item.user and item.termgpa == "1":
             datagpa1.append(item)
     return render(request, 'firstTerm.html', {'datagrade1':datagrade1,'datagpa1':datagpa1,'Resultgpax':Resultgpax})
-
-def secondTerm(request):# GPA ของเทอม 2
+#หน้า Result เทอม2
+def secondTerm(request):
     datagrade2 = []
     datagpa2 = []
     datagpax=[]
@@ -489,8 +514,10 @@ def secondTerm(request):# GPA ของเทอม 2
     unit_upper =[]
     Resultgpax=0
     for i in Datagrade.objects.all():
+        # หาค่า Grade ในเทอม 2
         if request.user == i.user and i.term == "2":
             datagrade2.append(i)
+        # หาค่า Grade และ Unit แต่ละเทอม
         if request.user == i.user and i.term == "1":
             if i.Grade != "0":
                 datagpax.append(float(i.Grade))
@@ -523,17 +550,20 @@ def secondTerm(request):# GPA ของเทอม 2
             if i.Grade != "0":
                 datagpax.append(float(i.Grade))
                 unit_lower.append(int(i.unit))
+    #หาค่า Unit * Grade ในแต่ละเทอม (GPAX)
     for data in GPA.objects.all():
         if request.user == data.user and data.termgpa == "2":
             for listunit in range(len(unit_lower)):
                 resunit = unit_lower[listunit]*datagpax[listunit]
                 unit_upper.append(resunit)
             Resultgpax = '%.2f' %(sum(unit_upper)/sum(unit_lower))
+    #หาค่า GPA เทอม 2
     for item in GPA.objects.all():
         if request.user == item.user and item.termgpa == "2":
             datagpa2.append(item)
     return render(request,'secondTerm.html',{'datagrade2':datagrade2,'datagpa2':datagpa2,'Resultgpax':Resultgpax})
-def thirdTerm(request):# GPA ของเทอม 3
+#หน้า Result เทอม3
+def thirdTerm(request):
     datagrade3 = []
     datagpa3=[]
     datagpax=[]
@@ -541,8 +571,10 @@ def thirdTerm(request):# GPA ของเทอม 3
     unit_upper =[]
     Resultgpax=0
     for i in Datagrade.objects.all():
+        # หาค่า Grade ในเทอม 3
         if request.user == i.user and i.term == "3":
             datagrade3.append(i)
+        # หาค่า Grade และ Unit แต่ละเทอม
         if request.user == i.user and i.term == "1":
             if i.Grade != "0":
                 datagpax.append(float(i.Grade))
@@ -575,18 +607,20 @@ def thirdTerm(request):# GPA ของเทอม 3
             if i.Grade != "0":
                 datagpax.append(float(i.Grade))
                 unit_lower.append(int(i.unit))
+    # หาค่า Unit * Grade ในแต่ละเทอม (GPAX)
     for data in GPA.objects.all():
         if request.user == data.user and data.termgpa == "3":
             for listunit in range(len(unit_lower)):
                 resunit = unit_lower[listunit]*datagpax[listunit]
                 unit_upper.append(resunit)
             Resultgpax = '%.2f' %(sum(unit_upper)/sum(unit_lower))
+    #หาค่า GPA เทอม 3
     for item in GPA.objects.all():
         if request.user == item.user and item.termgpa == "3":
             datagpa3.append(item)
     return render(request, 'thirdTerm.html', {'datagrade3':datagrade3,'datagpa3':datagpa3,'Resultgpax':Resultgpax})
-
-def fourthTerm(request):# GPA ของเทอม 4
+#หน้า Result เทอม4
+def fourthTerm(request):
     datagrade4 = []
     datagpa4=[]
     datagpax=[]
@@ -594,8 +628,10 @@ def fourthTerm(request):# GPA ของเทอม 4
     unit_upper =[]
     Resultgpax=0
     for i in Datagrade.objects.all():
+        # หาค่า Grade ในเทอม 4
         if request.user == i.user and i.term == "4":
             datagrade4.append(i)
+        # หาค่า Grade และ Unit แต่ละเทอม
         if request.user == i.user and i.term == "1":
             if i.Grade != "0":
                 datagpax.append(float(i.Grade))
@@ -628,17 +664,20 @@ def fourthTerm(request):# GPA ของเทอม 4
             if i.Grade != "0":
                 datagpax.append(float(i.Grade))
                 unit_lower.append(int(i.unit))
+    # หาค่า Unit * Grade ในแต่ละเทอม (GPAX)
     for data in GPA.objects.all():
         if request.user == data.user and data.termgpa == "4":
             for listunit in range(len(unit_lower)):
                 resunit = unit_lower[listunit]*datagpax[listunit]
                 unit_upper.append(resunit)
             Resultgpax = '%.2f' %(sum(unit_upper)/sum(unit_lower))
+    # หาค่า GPA เทอม 4
     for item in GPA.objects.all():
         if request.user == item.user and item.termgpa == "4":
             datagpa4.append(item)
     return render(request, 'fourthTerm.html', {'datagrade4':datagrade4,'datagpa4':datagpa4,'Resultgpax':Resultgpax})
-def fifthTerm(request):# GPA ของเทอม 5
+#หน้า Result เทอม5
+def fifthTerm(request):
     datagrade5 = []
     datagpa5=[]
     datagpax=[]
@@ -646,8 +685,10 @@ def fifthTerm(request):# GPA ของเทอม 5
     unit_upper =[]
     Resultgpax=0
     for i in Datagrade.objects.all():
+        # หาค่า Grade ในเทอม 5
         if request.user == i.user and i.term == "5":
             datagrade5.append(i)
+        # หาค่า Grade และ Unit แต่ละเทอม
         if request.user == i.user and i.term == "1":
             if i.Grade != "0":
                 datagpax.append(float(i.Grade))
@@ -680,18 +721,20 @@ def fifthTerm(request):# GPA ของเทอม 5
             if i.Grade != "0":
                 datagpax.append(float(i.Grade))
                 unit_lower.append(int(i.unit))
+    # หาค่า Unit * Grade ในแต่ละเทอม (GPAX)
     for data in GPA.objects.all():
         if request.user == data.user and data.termgpa == "5":
             for listunit in range(len(unit_lower)):
                 resunit = unit_lower[listunit]*datagpax[listunit]
                 unit_upper.append(resunit)
             Resultgpax = '%.2f' %(sum(unit_upper)/sum(unit_lower))
+    # หาค่า GPA เทอม 5
     for item in GPA.objects.all():
         if request.user == item.user and item.termgpa == "5":
             datagpa5.append(item)
     return render(request, 'fifthTerm.html', {'datagrade5':datagrade5,'datagpa5':datagpa5,'Resultgpax':Resultgpax})
-
-def sixthTerm(request):# GPA ของเทอม 6
+#หน้า Result เทอม6
+def sixthTerm(request):
     datagrade6 = []
     datagpa6=[]
     datagpax=[]
@@ -699,8 +742,10 @@ def sixthTerm(request):# GPA ของเทอม 6
     unit_upper =[]
     Resultgpax=0
     for i in Datagrade.objects.all():
+        # หาค่า Grade ในเทอม 6
         if request.user == i.user and i.term == "6":
             datagrade6.append(i)
+        # หาค่า Grade และ Unit แต่ละเทอม
         if request.user == i.user and i.term == "1":
             if i.Grade != "0":
                 datagpax.append(float(i.Grade))
@@ -733,18 +778,20 @@ def sixthTerm(request):# GPA ของเทอม 6
             if i.Grade != "0":
                 datagpax.append(float(i.Grade))
                 unit_lower.append(int(i.unit))
+    # หาค่า Unit * Grade ในแต่ละเทอม (GPAX)
     for data in GPA.objects.all():
         if request.user == data.user and data.termgpa == "6":
             for listunit in range(len(unit_lower)):
                 resunit = unit_lower[listunit]*datagpax[listunit]
                 unit_upper.append(resunit)
             Resultgpax = '%.2f' %(sum(unit_upper)/sum(unit_lower))
+    # หาค่า GPA เทอม 6
     for item in GPA.objects.all():
         if request.user == item.user and item.termgpa == "6":
             datagpa6.append(item)
     return render(request, 'sixthTerm.html', {'datagrade6':datagrade6,'datagpa6':datagpa6,'Resultgpax':Resultgpax})
-
-def seventhTerm(request):# GPA ของเทอม 7
+#หน้า Result เทอม7
+def seventhTerm(request):
     datagrade7 = []
     datagpa7=[]
     datagpax=[]
@@ -752,8 +799,10 @@ def seventhTerm(request):# GPA ของเทอม 7
     unit_upper =[]
     Resultgpax=0
     for i in Datagrade.objects.all():
+        # หาค่า Grade ในเทอม 7
         if request.user == i.user and i.term == "7":
             datagrade7.append(i)
+        # หาค่า Grade และ Unit แต่ละเทอม
         if request.user == i.user and i.term == "1":
             if i.Grade != "0":
                 datagpax.append(float(i.Grade))
@@ -786,18 +835,20 @@ def seventhTerm(request):# GPA ของเทอม 7
             if i.Grade != "0":
                 datagpax.append(float(i.Grade))
                 unit_lower.append(int(i.unit))
+    # หาค่า Unit * Grade ในแต่ละเทอม (GPAX)
     for data in GPA.objects.all():
         if request.user == data.user and data.termgpa == "7":
             for listunit in range(len(unit_lower)):
                 resunit = unit_lower[listunit]*datagpax[listunit]
                 unit_upper.append(resunit)
             Resultgpax = '%.2f' %(sum(unit_upper)/sum(unit_lower))
+    # หาค่า GPA เทอม 7
     for item in GPA.objects.all():
         if request.user == item.user and item.termgpa == "7":
             datagpa7.append(item)
     return render(request, 'seventhTerm.html', {'datagrade7':datagrade7,'datagpa7':datagpa7,'Resultgpax':Resultgpax})
-
-def eightTerm(request):# GPA ของเทอม 8
+#หน้า Result เทอม8
+def eightTerm(request):
     datagrade8 = []
     datagpa8=[]
     datagpax=[]
@@ -805,8 +856,10 @@ def eightTerm(request):# GPA ของเทอม 8
     unit_upper =[]
     Resultgpax=0
     for i in Datagrade.objects.all():
+        # หาค่า Grade ในเทอม 8
         if request.user == i.user and i.term == "8":
             datagrade8.append(i)
+        # หาค่า Grade และ Unit แต่ละเทอม
         if request.user == i.user and i.term == "1":
             if i.Grade != "0":
                 datagpax.append(float(i.Grade))
@@ -839,20 +892,23 @@ def eightTerm(request):# GPA ของเทอม 8
             if i.Grade != "0":
                 datagpax.append(float(i.Grade))
                 unit_lower.append(int(i.unit))
+    # หาค่า Unit * Grade ในแต่ละเทอม (GPAX)
     for data in GPA.objects.all():
         if request.user == data.user and data.termgpa == "8":
             for listunit in range(len(unit_lower)):
                 resunit = unit_lower[listunit]*datagpax[listunit]
                 unit_upper.append(resunit)
+    # หาค่า GPA เทอม 8
     for item in GPA.objects.all():
         if request.user == item.user and item.termgpa == "8":
             datagpa8.append(item)
     return render(request, 'eightTerm.html', {'datagrade8':datagrade8,'datagpa8':datagpa8,'Resultgpax':Resultgpax})
+#หน้ารูป Flow
 def picFlow(request):
     return render(request, 'picFlow.html')
-
+#หน้า about
 def about(request):
     return render(request, 'about.html')
-
+#หน้า help
 def help(request):
     return render(request, 'help.html')
