@@ -10,10 +10,10 @@
       <th scope="col">Grade</th>
     </tr>
   </thead>
-    {% for itemlist in dataterm8 %}
+    {% for itemlist in datagrade8 %}
   <tbody>
     <tr>
-      <th scope="row">{{itemlist.id}}</th>
+      <th scope="row">{{forloop.counter}}</th>
       <td>{{itemlist.subject}}</td>
       <td>{{itemlist.unit}}</td>
       <td>{{itemlist.Grade}}</td>
@@ -22,8 +22,8 @@
   </tbody>
 </table>
 <h3>GPA :
-{% for listGPA in GPARES %}
-  {{listGPA.GPA_8}}
+{% for listGPA in datagpa8 %}
+  {{listGPA.GPA}}
 {% endfor %}</h3>
-<h3>Your GPAX : {{res_GPAX}}<h3>
+<h3>Your GPAX : {{Resultgpax}}<h3>
 {% endblock %}

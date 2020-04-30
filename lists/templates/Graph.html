@@ -1,6 +1,6 @@
 {% extends 'base.html' %} {% block content %}
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <script type="text/javascript">
+    <script type="text/javascript" id="demo">
             google.charts.load('current', {'packages':['line']});
       google.charts.setOnLoadCallback(drawChart);
 
@@ -9,33 +9,31 @@
       var data = new google.visualization.DataTable();
       data.addColumn('number', 'Term');
       data.addColumn('number', 'Your GPA');
-
-
       data.addRows([
-        [1,  {% for listGPA in GPARES %}
-              {{listGPA.GPA_1}}+0
+        [1, {% for listGPA in datagpagraph_term1 %}
+              {{listGPA.GPA}}+0
             {% endfor %}],
-        [2,  {% for listGPA in GPARES %}
-              {{listGPA.GPA_2}}+0
+        [2, {% for listGPA in datagpagraph_term2 %}
+              {{listGPA.GPA}}+0
             {% endfor %}],
-        [3,  {% for listGPA in GPARES %}
-              {{listGPA.GPA_3}}+0
+        [3, {% for listGPA in datagpagraph_term3 %}
+              {{listGPA.GPA}}+0
             {% endfor %}],
-        [4,  {% for listGPA in GPARES %}
-              {{listGPA.GPA_4}}+0
+        [4, {% for listGPA in datagpagraph_term4 %}
+              {{listGPA.GPA}}+0
             {% endfor %}],
-        [5,  {% for listGPA in GPARES %}
-              {{listGPA.GPA_5}}+0
+        [5, {% for listGPA in datagpagraph_term5 %}
+              {{listGPA.GPA}}+0
             {% endfor %}],
-        [6,  {% for listGPA in GPARES %}
-              {{listGPA.GPA_6}}+0
+        [6, {% for listGPA in datagpagraph_term6 %}
+              {{listGPA.GPA}}+0
             {% endfor %}],
-        [7,  {% for listGPA in GPARES %}
-              {{listGPA.GPA_7}}+0
+        [7, {% for listGPA in datagpagraph_term7 %}
+              {{listGPA.GPA}}+0
             {% endfor %}],
-        [8,  {% for listGPA in GPARES %}
-              {{listGPA.GPA_8}}+0
-            {% endfor %}]
+        [8, {% for listGPA in datagpagraph_term8 %}
+              {{listGPA.GPA}}+0
+            {% endfor %}],
       ]);
 
       var options = {
@@ -55,7 +53,7 @@
     </script>
         <body>
     <div id="linechart_material" style="width: 1300px; height: 500px"></div>
-        <h3>Your GPAX : {{res_GPAX}}<h3>
+        <h3>Your GPAX : {{Resultgpax}}<h3>
   </body>
 
 {% endblock %}

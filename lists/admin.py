@@ -1,6 +1,7 @@
 from django.contrib import admin
-from .models import Userinfo
+from .models import Datagrade,GPA
 
 
-admin.site.register(Userinfo)
+admin.site.register(Datagrade)
+admin.site.register(GPA)
 # Register your models here.
