@@ -41,24 +41,12 @@ def signup(request):
     })
 #หน้า Gradecalculator และปุ่มกด Save
 def calGrade(request):
+    not_input = "Plese check your infromation before saving."
     if request.method == 'POST':
         # เช็ค input
         if request.POST.get('subjectTerm') == "0":
             message = 'Please select term before saving grade'
             return render(request, 'home.html', {'message': message})
-        not_input = "Plese check your infromation before saving."
-        checkinput = float(request.POST.get('subject1Unit')) + float(request.POST.get('subject1Grade')) + \
-                     float(request.POST.get('subject2Unit')) + float(request.POST.get('subject2Grade')) + \
-                     float(request.POST.get('subject3Unit')) + float(request.POST.get('subject3Grade')) + \
-                     float(request.POST.get('subject4Unit')) + float(request.POST.get('subject4Grade')) + \
-                     float(request.POST.get('subject5Unit')) + float(request.POST.get('subject5Grade')) + \
-                     float(request.POST.get('subject6Unit')) + float(request.POST.get('subject6Grade')) + \
-                     float(request.POST.get('subject7Unit')) + float(request.POST.get('subject7Grade')) + \
-                     float(request.POST.get('subject8Unit')) + float(request.POST.get('subject8Grade')) + \
-                     float(request.POST.get('subject9Unit')) + float(request.POST.get('subject9Grade'))
-        # ไม่ได้กรอกข้อมูลจะแสดง "Plese check your infromation before saving."
-        if checkinput == 0.0:
-            return render(request, 'home.html', {'notinput': not_input})
         # ผลคูณของ Unit ตัวที่ 1 กับ Grade ตัวที่ 1 ถึง ผลคูณของ Unit ตัวที่ 9 กับ Grade ตัวที่ 9
         sub1 = float(request.POST.get('subject1Unit')) * float(request.POST.get('subject1Grade'))
         sub2 = float(request.POST.get('subject2Unit')) * float(request.POST.get('subject2Grade'))
@@ -78,6 +66,9 @@ def calGrade(request):
         )
         # ผลรวมของ Unit ตัวที่ 1 กับ Grade ตัวที่ 1 ถึง Unit ตัวที่ 9 กับ Grade ตัวที่ 9
         sumsub = sub1 + sub2 + sub3 + sub4 + sub5 + sub6 + sub7 + sub8 + sub9
+        # ไม่ได้กรอกข้อมูลจะแสดง "Plese check your infromation before saving."
+        if sumunit == 0.0:
+            return render(request, 'home.html', {'notinput': not_input})
         # นำผลรวมของ Unit ตัวที่ 1 กับ Grade ตัวที่ 1 ถึง Unit ตัวที่ 9 กับ Grade ตัวที่ 9 มาหาร ผลรวมของ unit ทั้งหมด
         res = '%.2f' %(sumsub / sumunit)
         #รับค่าจาก User และบันทึกค่าลง Batabase
