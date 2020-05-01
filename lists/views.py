@@ -78,10 +78,6 @@ def calGrade(request):
                 #ลบค่าของ subject unit Grade term user ที่เคยบันทีกไว้
                 if request.user == i.user and i.term == request.POST.get('subjectTerm'):
                     Datagrade.objects.filter(pk=i.id).delete()
-            for item in GPA.objects.all():
-                #ลบค่าของ GPA ที่เคยบันทีกไว้
-                if request.user == item.user and item.termgpa == request.POST.get('subjectTerm'):
-                    GPA.objects.filter(pk=item.id).delete()
         # ทำการสร้าง subject unit Grade term user จาก input ของ User
         Datagrade.objects.create(subject=request.POST['subject1name'],unit=request.POST['subject1Unit'],
                                  Grade=request.POST['subject1Grade'], term=request.POST.get('subjectTerm'),
