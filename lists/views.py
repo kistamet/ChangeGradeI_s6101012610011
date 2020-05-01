@@ -2,7 +2,7 @@ from django.contrib.auth import authenticate, login
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import GPA,Datagrade
+from .models import Datagrade
 #หน้า Gradecalculator
 def home_page(request):
     return render(request, 'home.html')
@@ -110,8 +110,6 @@ def calGrade(request):
         Datagrade.objects.create(subject=request.POST['subject9name'], unit=request.POST['subject9Unit'],
                                  Grade=request.POST['subject9Grade'], term=request.POST.get('subjectTerm'),
                                  user=request.user)
-        #สร้าง GPA user termgpa GPAX
-        GPA.objects.create(GPA=res,user=request.user,termgpa=request.POST.get('subjectTerm'),GPAX="0")
         return render(request, 'home.html', {'result': res})
 def flow(request):
     Result = ''
