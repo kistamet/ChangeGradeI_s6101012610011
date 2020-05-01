@@ -364,90 +364,70 @@ def listOfSubject(request) :
 #หน้า Graph
 def Graph(request):
     datagpax=[]
-    Resultgpax = 0
-    unit_lower=[]
-    unit_upper =[]
-    datagpagraph_term1=[0]
-    datagpagraph_term2= [0]
-    datagpagraph_term3=[0]
-    datagpagraph_term4= [0]
-    datagpagraph_term5=[0]
-    datagpagraph_term6= [0]
-    datagpagraph_term7= [0]
-    datagpagraph_term8= [0]
-    #หาค่า Grade และ Unit แต่ละเทอม
+    sum_unit=[]
+    datagpagraph_term1 = []
+    datagpagraph_term2 = []
+    datagpagraph_term3 = []
+    datagpagraph_term4 = []
+    datagpagraph_term5 = []
+    datagpagraph_term6 = []
+    datagpagraph_term7 = []
+    datagpagraph_term8 = []
+    #หาค่า Grade แต่ละเทอม เพื่อ plot graph
     for i in Datagrade.objects.all():
-        if request.user == i.user and i.term == "1":
-            if i.Grade != "0":
-                datagpax.append(float(i.Grade))
-                unit_lower.append(int(i.unit))
-        if request.user == i.user and i.term == "2":
-            if i.Grade != "0":
-                datagpax.append(float(i.Grade))
-                unit_lower.append(int(i.unit))
-        if request.user == i.user and i.term == "3":
-            if i.Grade != "0":
-                datagpax.append(float(i.Grade))
-                unit_lower.append(int(i.unit))
-        if request.user == i.user and i.term == "4":
-            if i.Grade != "0":
-                datagpax.append(float(i.Grade))
-                unit_lower.append(int(i.unit))
-        if request.user == i.user and i.term == "5":
-            if i.Grade != "0":
-                datagpax.append(float(i.Grade))
-                unit_lower.append(int(i.unit))
-        if request.user == i.user and i.term == "6":
-            if i.Grade != "0":
-                datagpax.append(float(i.Grade))
-                unit_lower.append(int(i.unit))
-        if request.user == i.user and i.term == "7":
-            if i.Grade != "0":
-                datagpax.append(float(i.Grade))
-                unit_lower.append(int(i.unit))
-        if request.user == i.user and i.term == "8":
-            if i.Grade != "0":
-                datagpax.append(float(i.Grade))
-                unit_lower.append(int(i.unit))
-    #หาค่า Unit * Grade ในแต่ละเทอม (GPAX)
-    for data in GPA.objects.all():
-        if request.user == data.user and data.termgpa == "1":
-            for listunit in range(len(unit_lower)):
-                resunit = unit_lower[listunit]*datagpax[listunit]
-                unit_upper.append(resunit)
-            #GPAX
-            Resultgpax = '%.2f' %(sum(unit_upper)/sum(unit_lower))
-    #หา GPA แต่ละเทอม เพื่อ plot graph
-    for i in GPA.objects.all():
-        if request.user == i.user and i.termgpa == "1" :
-            datagpagraph_term1 = []
-            datagpagraph_term1.append(i)
-        if request.user == i.user and i.termgpa == "2":
-            datagpagraph_term2 = []
-            datagpagraph_term2.append(i)
-        if request.user == i.user and i.termgpa == "3" :
-            datagpagraph_term3 = []
-            datagpagraph_term3.append(i)
-        if request.user == i.user and i.termgpa == "4":
-            datagpagraph_term4 = []
-            datagpagraph_term4.append(i)
-        if request.user == i.user and i.termgpa == "5":
-            datagpagraph_term5 = []
-            datagpagraph_term5.append(i)
-        if request.user == i.user and i.termgpa == "6":
-            datagpagraph_term6 = []
-            datagpagraph_term6.append(i)
-        if request.user == i.user and i.termgpa == "7":
-            datagpagraph_term7 = []
-            datagpagraph_term7.append(i)
-        if request.user == i.user and i.termgpa == "8":
-            datagpagraph_term8 = []
-            datagpagraph_term8.append(i)
-    return render(request, 'Graph.html',{'datagpagraph_term1':datagpagraph_term1,'datagpagraph_term2':datagpagraph_term2,
+        if request.user == i.user:
+            if i.term == "1" and i.term != 0:
+                try:
+                    datagpagraph_term1.append(float(i.GPA))
+                except:
+                    pass
+            if i.term == "2" and i.term != 0:
+                try:
+                    datagpagraph_term2.append(float(i.GPA))
+                except:
+                    pass
+            if i.term == "3" and i.term != 0:
+                try:
+                    datagpagraph_term3.append(float(i.GPA))
+                except:
+                    pass
+            if i.term == "4" and i.term != 0:
+                try:
+                    datagpagraph_term4.append(float(i.GPA))
+                except:
+                    pass
+            if i.term == "5" and i.term != 0:
+                try:
+                    datagpagraph_term5.append(float(i.GPA))
+                except:
+                    pass
+            if i.term == "6" and i.term != 0:
+                try:
+                    datagpagraph_term6.append(float(i.GPA))
+                except:
+                    pass
+            if i.term == "7" and i.term != 0:
+                try:
+                    datagpagraph_term7.append(float(i.GPA))
+                except:
+                    pass
+            if i.term == "8" and i.term != 0:
+                try:
+                    datagpagraph_term8.append(float(i.GPA))
+                except:
+                    pass
+            #หาค่า GPAX
+            if i.Grade != "0" and i.unit != "0":
+                sum_unit.append(float(i.unit))
+                datagpax.append(float(i.Grade) * float(i.unit))
+    print(datagpagraph_term1)
+    if sum_unit and datagpax != 0:
+        Result_gpax = '%.2f' % (sum(datagpax) / sum(sum_unit))
+        return render(request, 'Graph.html', {'Result_gpax': Result_gpax,'datagpagraph_term1':datagpagraph_term1,'datagpagraph_term2':datagpagraph_term2,
                                      'datagpagraph_term3':datagpagraph_term3,'datagpagraph_term4':datagpagraph_term4,
                                      'datagpagraph_term5':datagpagraph_term5,'datagpagraph_term6':datagpagraph_term6,
-                                     'datagpagraph_term7':datagpagraph_term7,'datagpagraph_term8':datagpagraph_term8,
-                                     'Resultgpax':Resultgpax})
+                                     'datagpagraph_term7':datagpagraph_term7,'datagpagraph_term8':datagpagraph_term8})
+    return render(request, 'Graph.html')
 #หน้า Result เทอม1
 def firstTerm(request):
     datagrade1 = []
@@ -509,7 +489,7 @@ def fourthTerm(request):
     datagpax=[]
     sum_unit=[]
     for i in Datagrade.objects.all():
-        # หาค่า Grade ในเทอม 3
+        # หาค่า Grade ในเทอม 4
         if request.user == i.user and i.term == "4":
             datagrade4.append(i)
         #หาค่า GPAX

@@ -11,29 +11,29 @@
       data.addColumn('number', 'Your GPA');
       data.addRows([
         [1, {% for listGPA in datagpagraph_term1 %}
-              {{listGPA.GPA}}+0
-            {% endfor %}],
+              {{listGPA}}
+            {% endfor %}+0],
         [2, {% for listGPA in datagpagraph_term2 %}
-              {{listGPA.GPA}}+0
-            {% endfor %}],
+              {{listGPA}}
+            {% endfor %}+0],
         [3, {% for listGPA in datagpagraph_term3 %}
-              {{listGPA.GPA}}+0
-            {% endfor %}],
+              {{listGPA}}
+            {% endfor %}+0],
         [4, {% for listGPA in datagpagraph_term4 %}
-              {{listGPA.GPA}}+0
-            {% endfor %}],
+              {{listGPA}}
+            {% endfor %}+0],
         [5, {% for listGPA in datagpagraph_term5 %}
-              {{listGPA.GPA}}+0
-            {% endfor %}],
+              {{listGPA}}
+            {% endfor %}+0],
         [6, {% for listGPA in datagpagraph_term6 %}
-              {{listGPA.GPA}}+0
-            {% endfor %}],
+              {{listGPA}}
+            {% endfor %}+0],
         [7, {% for listGPA in datagpagraph_term7 %}
-              {{listGPA.GPA}}+0
-            {% endfor %}],
+              {{listGPA}}
+            {% endfor %}+0],
         [8, {% for listGPA in datagpagraph_term8 %}
-              {{listGPA.GPA}}+0
-            {% endfor %}],
+              {{listGPA}}
+            {% endfor %}+0],
       ]);
 
       var options = {
@@ -53,7 +53,7 @@
     </script>
         <body>
     <div id="linechart_material" style="width: 1300px; height: 500px"></div>
-        <h3>Your GPAX : {{Resultgpax}}<h3>
+        <h3>Your GPAX : {{Result_gpax}}<h3>
   </body>
 
 {% endblock %}
