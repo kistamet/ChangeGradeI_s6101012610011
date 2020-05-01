@@ -9,3 +9,9 @@ class Datagrade(models.Model):
     GPA = models.CharField(max_length=255)
     def __str__(self):
         return str(self.user)
+class DataGPA(models.Model):
+    user = models.ForeignKey(User,on_delete=models.CASCADE)
+    term_gpa = models.CharField(max_length=255)
+    GPA = models.CharField(max_length=255)
+    def __str__(self):
+        return str(self.user)
