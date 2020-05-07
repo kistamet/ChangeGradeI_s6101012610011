@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from .models import Datagrade, DataGPA
-
+from django.db.models import Q
 
 # หน้า Gradecalculator
 def home_page(request):
@@ -91,34 +91,48 @@ def calGrade(request):
                 if request.user == item.user and item.term_gpa == request.POST.get('subjectTerm'):
                     DataGPA.objects.filter(pk=item.id).delete()
         # ทำการสร้าง subject unit Grade term user จาก input ของ User
-        Datagrade.objects.create(subject=request.POST['subject1name'], unit=request.POST['subject1Unit'],
-                                 Grade=request.POST['subject1Grade'], term=request.POST.get('subjectTerm'),
-                                 user=request.user)
-        Datagrade.objects.create(subject=request.POST['subject2name'], unit=request.POST['subject2Unit'],
-                                 Grade=request.POST['subject2Grade'], term=request.POST.get('subjectTerm'),
-                                 user=request.user)
-        Datagrade.objects.create(subject=request.POST['subject3name'], unit=request.POST['subject3Unit'],
-                                 Grade=request.POST['subject3Grade'], term=request.POST.get('subjectTerm'),
-                                 user=request.user)
-        Datagrade.objects.create(subject=request.POST['subject4name'], unit=request.POST['subject4Unit'],
-                                 Grade=request.POST['subject4Grade'], term=request.POST.get('subjectTerm'),
-                                 user=request.user)
-        Datagrade.objects.create(subject=request.POST['subject5name'], unit=request.POST['subject5Unit'],
-                                 Grade=request.POST['subject5Grade'], term=request.POST.get('subjectTerm'),
-                                 user=request.user)
-        Datagrade.objects.create(subject=request.POST['subject6name'], unit=request.POST['subject6Unit'],
-                                 Grade=request.POST['subject6Grade'], term=request.POST.get('subjectTerm'),
-                                 user=request.user)
-        Datagrade.objects.create(subject=request.POST['subject7name'], unit=request.POST['subject7Unit'],
-                                 Grade=request.POST['subject7Grade'], term=request.POST.get('subjectTerm'),
-                                 user=request.user)
-        Datagrade.objects.create(subject=request.POST['subject8name'], unit=request.POST['subject8Unit'],
-                                 Grade=request.POST['subject8Grade'], term=request.POST.get('subjectTerm'),
-                                 user=request.user)
-        Datagrade.objects.create(subject=request.POST['subject9name'], unit=request.POST['subject9Unit'],
-                                 Grade=request.POST['subject9Grade'], term=request.POST.get('subjectTerm'),
-                                 user=request.user)
+        if request.POST['subject1Unit'] != "0":
+            Datagrade.objects.create(subject=request.POST['subject1name'], unit=request.POST['subject1Unit'],
+                                     Grade=request.POST['subject1Grade'], term=request.POST.get('subjectTerm'),
+                                     user=request.user)
+        if request.POST['subject2Unit'] != "0":
+            Datagrade.objects.create(subject=request.POST['subject2name'], unit=request.POST['subject2Unit'],
+                                     Grade=request.POST['subject2Grade'], term=request.POST.get('subjectTerm'),
+                                     user=request.user)
+        if request.POST['subject3Unit'] != "0":
+            Datagrade.objects.create(subject=request.POST['subject3name'], unit=request.POST['subject3Unit'],
+                                     Grade=request.POST['subject3Grade'], term=request.POST.get('subjectTerm'),
+                                     user=request.user)
+        if request.POST['subject4Unit'] != "0":
+            Datagrade.objects.create(subject=request.POST['subject4name'], unit=request.POST['subject4Unit'],
+                                     Grade=request.POST['subject4Grade'], term=request.POST.get('subjectTerm'),
+                                     user=request.user)
+        if request.POST['subject5Unit'] != "0":
+            Datagrade.objects.create(subject=request.POST['subject5name'], unit=request.POST['subject5Unit'],
+                                     Grade=request.POST['subject5Grade'], term=request.POST.get('subjectTerm'),
+                                     user=request.user)
+        if request.POST['subject6Unit'] != "0":
+            Datagrade.objects.create(subject=request.POST['subject6name'], unit=request.POST['subject6Unit'],
+                                     Grade=request.POST['subject6Grade'], term=request.POST.get('subjectTerm'),
+                                     user=request.user)
+        if request.POST['subject7Unit'] != "0":
+            Datagrade.objects.create(subject=request.POST['subject7name'], unit=request.POST['subject7Unit'],
+                                     Grade=request.POST['subject7Grade'], term=request.POST.get('subjectTerm'),
+                                     user=request.user)
+        if request.POST['subject8Unit'] != "0":
+            Datagrade.objects.create(subject=request.POST['subject8name'], unit=request.POST['subject8Unit'],
+                                     Grade=request.POST['subject8Grade'], term=request.POST.get('subjectTerm'),
+                                     user=request.user)
+        if request.POST['subject9Unit'] != "0":
+            Datagrade.objects.create(subject=request.POST['subject9name'], unit=request.POST['subject9Unit'],
+                                     Grade=request.POST['subject9Grade'], term=request.POST.get('subjectTerm'),
+                                     user=request.user)
         DataGPA.objects.create(term_gpa=request.POST.get('subjectTerm'), GPA=res, user=request.user)
+
+        # for i in Datagrade.objects.all():
+        #     # ลบค่าของ unit ที่เท่ากับ 0
+        #     if i.unit == "0":
+        #         Datagrade.objects.filter(pk=i.id).delete()
         return render(request, 'home.html', {'result': res})
 
 
@@ -427,18 +441,21 @@ def result(request):
     datagpa = []
     numberterm = request.POST.get('subjectTerm')
     noneterm = "Please select term"
-    # หาค่า Grade subjects unit แต่ละเทอม
     datagrade = Datagrade.objects.filter(user=request.user, term=request.POST.get('subjectTerm'))
+    # หาค่า Grade subjects unit แต่ละเทอม
     for i in Datagrade.objects.all():
         # หาค่า ผลรวมของ unit ทั้งหมด และ Grade * unit  แต่ละตัว เพื่อนนำไปหาค่า GPAX
+
         if request.user == i.user:
             if i.Grade != "0" and i.unit != "0":
+                print(i.unit)
                 sum_unit.append(float(i.unit))
                 datagpax.append(float(i.Grade) * float(i.unit))
     # หาค่า GPA ในแต่ละเทอม
     for item in DataGPA.objects.all():
-        if request.user == item.user and item.term_gpa == request.POST.get('subjectTerm'):
+        if request.user == item.user and item.term_gpa == request.POST.get('subjectTerm'):\
             datagpa.append(item)
+    print(datagpa)
     # หาค่า GPAX
     if sum_unit and datagpax != 0:
         Result_gpax = '%.2f' % (sum(datagpax) / sum(sum_unit))

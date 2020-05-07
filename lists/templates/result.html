@@ -42,10 +42,14 @@
   {% endfor %}
   </tbody>
 </table>
+    {% if not datagrade and numberterm != "0" and numberterm != None%}
+        <p><font size="5" color="B03A2E">TERM {{numberterm}} : No grade saved </font></p>
+          {% endif %}
 <h3>GPA :
 {% for listGPA in datagpa %}
   {{listGPA.GPA}}
+
 {% endfor %}
   <h3>Your GPAX : {{Result_gpax}}<h3>
-    {% endif %}
+      {% endif %}
 {% endblock %}
