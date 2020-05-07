@@ -44,12 +44,13 @@
 </table>
     {% if not datagrade and numberterm != "0" and numberterm != None%}
         <p><font size="5" color="B03A2E">TERM {{numberterm}} : No grade saved </font></p>
-          {% endif %}
+    {% endif %}
+    {% if datagpa|length > 0 and numberterm != "0" and numberterm != None%}
 <h3>GPA :
 {% for listGPA in datagpa %}
   {{listGPA.GPA}}
-
 {% endfor %}
+    {% endif %}
   <h3>Your GPAX : {{Result_gpax}}<h3>
       {% endif %}
 {% endblock %}
